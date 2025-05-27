@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout";
+import Customers from "./pages/Customers";
 
 function App() {
   return (
@@ -11,10 +12,7 @@ function App() {
             <h1 className="text-2xl font-bold text-center p-5">Dashboard</h1>
           }
         />
-        <Route
-          path="/customers"
-          element={<h1 className="text-xl">Customer List</h1>}
-        />
+        <Route path="/customers" element={<Customers />} />
         <Route
           path="*"
           element={
