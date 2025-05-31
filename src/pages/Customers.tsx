@@ -1,4 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import CustomerTable from "../components/CustomerTable";
+import CustomerForm from "../components/CustomerForm";
+import Modal from "../components/Modal";
 
 type Customer = {
   id: number;
@@ -29,91 +32,86 @@ const initialCustomers: Customer[] = [
 ];
 
 const Customers = () => {
-  const [customers, setCustomers] = useState(initialCustomers);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
+  const [customers, setCustomers] = useState<Customer[]>(() => {
+    const stored = localStorage.getItem("customers");
+    return stored ? JSON.parse(stored) : initialCustomers;
+  });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [editCustomer, setEditCustomer] = useState<Customer | null>(null);
+
+  useEffect(() => {
+    localStorage.setItem("customers", JSON.stringify(customers));
+  }, [customers]);
+
+  const handleAddCustomer = (data: Omit<Customer, "id">) => {
+    const newCustomer: Customer = {
+      id: customers.length + 1,
+      ...data,
+    };
+    setCustomers([...customers, newCustomer]);
+    setIsModalOpen(false);
+  };
+
+  const handleUpdateCustomer = (data: Omit<Customer, "id">) => {
+    if (!editCustomer) return;
+    const updated = customers.map((customer) =>
+      customer.id === editCustomer.id ? { ...customer, ...data } : customer
+    );
+    setCustomers(updated);
+    setEditCustomer(null);
+    setIsModalOpen(false);
+  };
+
+  const handleDeleteCustomer = (id: number) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this customer?"
+    );
+    if (confirmed) {
+      setCustomers(customers.filter((customer) => customer.id !== id));
+    }
+  };
+
+  const handleEditClick = (customer: Customer) => {
+    setEditCustomer(customer);
+    setIsModalOpen(true);
+  };
+
+  const handleOpenAddForm = () => {
+    setEditCustomer(null);
+    setIsModalOpen(true);
+  };
 
   return (
-    <div>
+    <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Customers</h1>
-      <table className="w-full table-auto border-collapse bg-white shadow rounded">
-        <thead>
-          <tr className="bg-gray-200 text-left">
-            <th className="px-4 py-2">ID</th>
-            <th className="px-4 py-2">Name</th>
-            <th className="px-4 py-2">Email</th>
-            <th className="px-4 py-2">Phone</th>
-          </tr>
-        </thead>
-        <tbody>
-          {customers.map((customer) => (
-            <tr key={customer.id} className="border-b hover:bg-gray-100">
-              <td className="px-4 py-2">{customer.id}</td>
-              <td className="px-4 py-2">{customer.name}</td>
-              <td className="px-4 py-2">{customer.email}</td>
-              <td className="px-4 py-2">{customer.phone}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (!name || !email || !phone) {
-            alert("Please fill in all fields");
-            return;
-          }
-          const newCustomer: Customer = {
-            id: customers.length + 1,
-            name,
-            email,
-            phone,
-          };
-          setCustomers([...customers, newCustomer]);
-
-          setName("");
-          setEmail("");
-          setPhone("");
-        }}
-        className="bg-white p-4 rounded shadow w-full max-w-md"
+      <button
+        onClick={handleOpenAddForm}
+        className="bg-gray-600 text-white py-2 px-4 mb-4 rounded hover:bg-gray-700"
       >
-        <h2 className="text-xl font-semibold mb-4">Add New Customer</h2>
-        <div className="mb-4">
-          <label className="block mb-1 font-medium">Name</label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="w-full border border-gray-300 px-3 py-2 rounded"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block mb-1 font-medium">Email</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full border border-gray-300 px-3 py-2 rounded"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block mb-1 font-medium">Phone</label>
-          <input
-            type="text"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            className="w-full border border-gray-300 px-3 py-2 rounded"
-          />
-        </div>
-        <button
-          type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          Add Customer
-        </button>
-      </form>
+        Add
+      </button>
+      <CustomerTable
+        customers={customers}
+        onDelete={handleDeleteCustomer}
+        onEdit={handleEditClick}
+      />
+
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <CustomerForm
+          onSubmit={editCustomer ? handleUpdateCustomer : handleAddCustomer}
+          defaultValues={
+            editCustomer
+              ? {
+                  name: editCustomer.name,
+                  email: editCustomer.email,
+                  phone: editCustomer.phone,
+                }
+              : undefined
+          }
+          isEditing={!!editCustomer}
+        />
+      </Modal>
     </div>
   );
 };

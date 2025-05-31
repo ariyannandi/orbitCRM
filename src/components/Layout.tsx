@@ -3,7 +3,6 @@ import { Link, Outlet } from "react-router-dom";
 const Layout = () => {
   return (
     <div className="flex h-screen">
-      {/* Sidebar */}
       <aside className="w-64 bg-gray-800 text-white p-4">
         <h2 className="text-xl font-bold mb-6">
           <nav className="flex flex-col gap-4">
@@ -17,7 +16,6 @@ const Layout = () => {
         </h2>
       </aside>
 
-      {/* Main content Area */}
       <main className="flex-1 bg-gray-100 p-6 overflow-y-auto">
         <Outlet />
       </main>
