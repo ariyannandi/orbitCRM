@@ -1,18 +1,17 @@
 import { Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout";
 import Customers from "./pages/Customers";
+import Dashboard from "./pages/Dashboard";
+import CustomerDetails from "./pages/CustomerDetails";
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
-        <Route
-          index
-          element={
-            <h1 className="text-2xl font-bold text-center p-5">Dashboard</h1>
-          }
-        />
+        <Route index element={<Dashboard />} />
         <Route path="/customers" element={<Customers />} />
+        <Route path="/customers/:id" element={<CustomerDetails />} />
+
         <Route
           path="*"
           element={

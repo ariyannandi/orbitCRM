@@ -81,9 +81,10 @@ const Customers = () => {
     setEditCustomer(null);
     setIsModalOpen(true);
   };
+  console.log("CustomerList component rendered");
 
   return (
-    <div className="p-4">
+    <div className="p-4 w-full overflow-x-auto">
       <h1 className="text-2xl font-bold mb-4">Customers</h1>
       <button
         onClick={handleOpenAddForm}

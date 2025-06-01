@@ -41,7 +41,7 @@ const CustomerForm = ({
   return (
     <form
       onSubmit={handleSubmit(handleFormSubmit)}
-      className="bg-white p-4 rounded shadow w-full max-w-md"
+      className="bg-white p-6 rounded shadow w-full max-w-xl"
     >
       <h2 className="text-xl font-semibold mb-4">
         {isEditing ? "Edit Customer" : "Add New Customer"}
