@@ -2,10 +2,12 @@ import { Link, Outlet } from "react-router-dom";
 
 const Layout = () => {
   return (
-    <div className="flex h-screen">
-      <aside className="w-64 bg-gray-800 text-white p-4">
-        <h2 className="text-xl font-bold mb-6">CRM</h2>
-        <nav className="flex flex-col gap-4">
+    <div className="flex h-screen select-none">
+      <aside className="w-64 bg-blue-300  p-4">
+        <h1 className="text-3xl text-blue-400 text-center underline font-extrabold mb-6">
+          CRM
+        </h1>
+        <nav className="flex flex-col text-center gap-4">
           <Link to="/" className="select-none hover:text-blue-200">
             Dashboard
           </Link>

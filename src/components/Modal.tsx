@@ -24,7 +24,7 @@ const Modal = ({ isOpen, onClose, children }: Props) => {
   if (!isOpen) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-50 bg-gray-700 opacity-95 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 bg-gray-500/50  flex items-center justify-center select-none">
       <div
         onClick={(e) => e.stopPropagation()}
         className="bg-white rounded-lg shadow-lg p-4  w-full max-w-xl transform transition-all duration-300 scale-100 opacity-100 animate-fadeIn"

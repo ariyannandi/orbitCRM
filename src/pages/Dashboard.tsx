@@ -22,45 +22,63 @@ const Dashboard = () => {
 
   return (
     <div className="p-6 space-y-6">
-      <h1 className="text-2xl font-bold">Dashboard</h1>
+      <h1 className="text-3xl text-blue-300 font-bold">Dashboard</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-white p-4 rounded shadow">
-          <h2 className="text-sm text-gray-500">Total Customers</h2>
-          <p className="text-2xl font-semibold">{totalCustomers}</p>
+          <h2 className="text-sm font-semibold text-blue-400">
+            Total Customers
+          </h2>
+          <p className="text-2xl pt-4 font-semibold">{totalCustomers}</p>
         </div>
         <div className="bg-white p-4 rounded shadow">
-          <h2 className="text-sm text-gray-500">Emails Collected</h2>
-          <p className="text-2xl font-semibold">
+          <h2 className="text-sm font-semibold text-blue-400">
+            Emails Collected
+          </h2>
+          <p className="text-2xl pt-4 font-semibold">
             {customers.filter((customer) => customer.email).length}
           </p>
         </div>
         <div className="bg-white p-4 rounded shadow">
-          <h2 className="text-sm text-gray-500">Phone Numbers</h2>
-          <p className="text-2xl font-semibold">
+          <h2 className="text-sm font-semibold text-blue-400">Phone Numbers</h2>
+          <p className="text-2xl pt-4 font-semibold">
             {customers.filter((customer) => customer.phone).length}
           </p>
         </div>
         <div className="bg-white p-4 rounded shadow">
-          <h2 className="text-sm text-gray-500">New This Week</h2>
-          <p className="text-2xl font-semibold">--</p>
+          <h2 className="text-sm font-semibold text-blue-400">New This Week</h2>
+          <p className="text-2xl pt-4 font-semibold">--</p>
         </div>
       </div>
-      <div className="bg-white p-4 rounded shadow">
-        <h2 className="text-lg font-semibold mb-2">Recent Customers</h2>
-        <table className="w-full text-left">
-          <thead>
+      <div className="bg-white p-4 rounded shadow relative overflow-x-auto sm:rounded-lg">
+        <table className="w-full text-left text-sm text-gray-500">
+          <caption className="py-5 px-2 text-3xl text-blue-300 font-semibold text-left ">
+            Recent Customers
+          </caption>
+          <thead className="text-xs text-gray-700 uppercase bg-blue-50 rounded-md">
             <tr className="text-sm text-gray-600 border-b">
-              <th className="py-2">Name</th>
-              <th>Email</th>
-              <th>Phone</th>
+              <th scope="col" className="px-6 py-3">
+                Name
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Email
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Phone
+              </th>
             </tr>
           </thead>
           <tbody>
             {recentCustomers.map((customer) => (
-              <tr key={customer.id} className="text-sm border-b">
-                <td className="py-2">{customer.name}</td>
-                <td>{customer.email}</td>
-                <td>{customer.phone}</td>
+              <tr key={customer.id} className="text-lg">
+                <td className="px-6 py-4 font-medium text-gray-500 whitespace-nowrap">
+                  {customer.name}
+                </td>
+                <td className="px-6 py-4 font-medium text-gray-500 whitespace-nowrap">
+                  {customer.email}
+                </td>
+                <td className="px-6 py-4 font-medium text-gray-500 whitespace-nowrap">
+                  {customer.phone}
+                </td>
               </tr>
             ))}
             {recentCustomers.length === 0 && (
