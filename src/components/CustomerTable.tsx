@@ -11,18 +11,61 @@ type Props = {
   customers: Customer[];
   onDelete: (id: number) => void;
   onEdit: (customer: Customer) => void;
+  onSort: (field: keyof Customer) => void;
 };
 
-const CustomerTable = ({ customers, onDelete, onEdit }: Props) => {
+const CustomerTable = ({ customers, onDelete, onEdit, onSort }: Props) => {
   return (
     <div className="select-none flex justify-center ">
       <table className="w-full my-5  bg-white shadow rounded-xl">
         <thead className="text-md text-gray-700 uppercase bg-blue-50 rounded-md ">
           <tr className="bg-blue-50 text-left">
             <th className="px-4 py-2">ID</th>
-            <th className="px-4 py-2">Name</th>
-            <th className="px-4 py-2">Email</th>
-            <th className="px-4 py-2">Phone</th>
+            <th
+              className="px-4 py-2 cursor-pointer"
+              onClick={() => onSort("name")}
+            >
+              <span className="flex items-center gap-1">
+                Name
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 320 512"
+                  height={15}
+                  width={15}
+                  className="cursor-pointer"
+                >
+                  <path d="M137.4 41.4c12.5-12.5 32.8-12.5 45.3 0l128 128c9.2 9.2 11.9 22.9 6.9 34.9s-16.6 19.8-29.6 19.8L32 224c-12.9 0-24.6-7.8-29.6-19.8s-2.2-25.7 6.9-34.9l128-128zm0 429.3l-128-128c-9.2-9.2-11.9-22.9-6.9-34.9s16.6-19.8 29.6-19.8l256 0c12.9 0 24.6 7.8 29.6 19.8s2.2 25.7-6.9 34.9l-128 128c-12.5 12.5-32.8 12.5-45.3 0z" />
+                </svg>
+              </span>
+            </th>
+            <th className="px-4 py-2" onClick={() => onSort("email")}>
+              <span className="flex items-center gap-1">
+                Email{" "}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 320 512"
+                  height={15}
+                  width={15}
+                  className="cursor-pointer"
+                >
+                  <path d="M137.4 41.4c12.5-12.5 32.8-12.5 45.3 0l128 128c9.2 9.2 11.9 22.9 6.9 34.9s-16.6 19.8-29.6 19.8L32 224c-12.9 0-24.6-7.8-29.6-19.8s-2.2-25.7 6.9-34.9l128-128zm0 429.3l-128-128c-9.2-9.2-11.9-22.9-6.9-34.9s16.6-19.8 29.6-19.8l256 0c12.9 0 24.6 7.8 29.6 19.8s2.2 25.7-6.9 34.9l-128 128c-12.5 12.5-32.8 12.5-45.3 0z" />
+                </svg>
+              </span>
+            </th>
+            <th className="px-4 py-2" onClick={() => onSort("phone")}>
+              <span className="flex items-center gap-1">
+                Phone{" "}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 320 512"
+                  height={15}
+                  width={15}
+                  className="cursor-pointer"
+                >
+                  <path d="M137.4 41.4c12.5-12.5 32.8-12.5 45.3 0l128 128c9.2 9.2 11.9 22.9 6.9 34.9s-16.6 19.8-29.6 19.8L32 224c-12.9 0-24.6-7.8-29.6-19.8s-2.2-25.7 6.9-34.9l128-128zm0 429.3l-128-128c-9.2-9.2-11.9-22.9-6.9-34.9s16.6-19.8 29.6-19.8l256 0c12.9 0 24.6 7.8 29.6 19.8s2.2 25.7-6.9 34.9l-128 128c-12.5 12.5-32.8 12.5-45.3 0z" />
+                </svg>
+              </span>
+            </th>
             <th className="px-4 py-2">Actions</th>
           </tr>
         </thead>

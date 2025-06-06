@@ -39,13 +39,40 @@ const Customers = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editCustomer, setEditCustomer] = useState<Customer | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [sortField, setSortField] = useState<keyof Customer | "">("");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
-  const filteredCustomers = customers.filter(
+  const sortedCustomers = [...customers].sort((a, b) => {
+    if (!sortField) return 0;
+
+    const valueA = a[sortField].toString().toLowerCase();
+    const valueB = b[sortField].toString().toLowerCase();
+
+    if (sortOrder === "asc") return valueA.localeCompare(valueB);
+    return valueB.localeCompare(valueA);
+  });
+
+  const filteredCustomers = sortedCustomers.filter(
     (customer) =>
       customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       customer.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
       customer.phone.includes(searchTerm)
   );
+
+  const paginatedCustomers = filteredCustomers.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const totalPages = Math.ceil(customers.length / itemsPerPage);
+
+  const goToPage = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
 
   useEffect(() => {
     localStorage.setItem("customers", JSON.stringify(customers));
@@ -88,6 +115,16 @@ const Customers = () => {
     setEditCustomer(null);
     setIsModalOpen(true);
   };
+
+  const handleSort = (field: keyof Customer) => {
+    if (sortField === field) {
+      setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
+    } else {
+      setSortField(field);
+      setSortOrder("asc");
+    }
+  };
+
   console.log("CustomerList component rendered");
 
   return (
@@ -139,10 +176,39 @@ const Customers = () => {
       </form>
 
       <CustomerTable
-        customers={filteredCustomers}
+        customers={paginatedCustomers}
         onDelete={handleDeleteCustomer}
         onEdit={handleEditClick}
+        onSort={handleSort}
       />
+
+      <div className="flex justify-center mt-4 gap-2">
+        <button
+          onClick={() => goToPage(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="px-3 py-1 cursor-pointer bg-blue-300 rounded disabled:opacity-50"
+        >
+          Prev
+        </button>
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+          <button
+            key={page}
+            onClick={() => goToPage(page)}
+            className={`px-3 py-1 rounded cursor-pointer ${
+              currentPage === page ? "bg-blue-500 text-white" : "bg-blue-150"
+            }`}
+          >
+            {page}
+          </button>
+        ))}
+        <button
+          onClick={() => goToPage(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className="px-3 py-1 cursor-pointer bg-blue-300 rounded disabled:opacity-50"
+        >
+          Next
+        </button>
+      </div>
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <CustomerForm
